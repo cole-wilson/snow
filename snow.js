@@ -9,12 +9,15 @@ var flakes = [];
 var piles = {};
 
 
+SNOW_CONFIG = {max: 100000, no_pile: true}
+
 function draw() {
-	if (flakes.length > 2000) {location.reload()}
+	if (flakes.length >  (SNOW_CONFIG ?? 2000)) {location.reload()}
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	tick++;
 	for (var i=0;i<flakes.length;i++) {
 		let flake = flakes[i]
+		if (!flake) continue;
 		if (!flake.done) {
 			flake.h += flake.v
 			flake.w = flake.ow + 10*Math.sin((tick+i) * Math.PI/180)
@@ -22,7 +25,12 @@ function draw() {
 		if (flake.h - canvas.height > canvas.height + 10) {
 			piles[Math.round(flake.w)] = piles[Math.round(flake.w)]+1 | 0
 			flake.h = canvas.height + canvas.height + 5 - 3*piles[Math.round(flake.w)]
-			flake.done = true
+			if (SNOW_CONFIG.no_pile) {
+				delete flakes[i];
+				flake.done = true;
+			} else {
+				flake.done = true;
+			}
 			newflake()
 		}
 		ctx.fillText("*", flake.w, flake.h - canvas.height)
