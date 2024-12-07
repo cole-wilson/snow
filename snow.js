@@ -9,8 +9,6 @@ var flakes = [];
 var piles = {};
 
 
-SNOW_CONFIG = {max: 100000, no_pile: true}
-
 function draw() {
 	if (flakes.length >  (SNOW_CONFIG ?? 2000)) {location.reload()}
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
